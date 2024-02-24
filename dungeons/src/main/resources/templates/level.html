@@ -6,6 +6,7 @@
         Fighting
     </title>
     <link type="text/css" rel="stylesheet" href="CSS/style.css"/>
+    <link type="text/css" rel="stylesheet" href="CSS/action/activeElement.css"/>
 </head>
 <body>
 <div class="menu">
@@ -14,30 +15,33 @@
 <div class="activeFighters">
 <span>
 <p>
-    <span th:text="${activeFighter.name}"></span>
+    <span th:text="${userFighter.name}"></span>
 </p>
     <div class="userBlock">
         <p>
             <span>Здоровье: </span>
-        <span th:text="${activeFighter.health}"></span>
+        <span th:text="${userFighter.health}"></span>
             <span> / </span>
-            <span th:text="${activeFighter.fullHealth}"></span>
+            <span th:text="${userFighter.fullHealth}"></span>
         </p>
     <p>
         <span>Атака: </span>
-      <span th:text="${activeFighter.attack}"></span>
+      <span th:text="${userFighter.attack}"></span>
     </p>
     <p>
         <span>Броня: </span>
-        <span th:text="${activeFighter.armor}"></span>
+        <span th:text="${userFighter.armor}"></span>
     </p>
     <p>
         <span>Скорость: </span>
-        <span th:text="${activeFighter.speed}"></span>
+        <span th:text="${userFighter.speed}"></span>
     </p>
+        <button class="button">Атака</button>
+        <button class="button">Оборона</button>
+        <button class="button">Пропустить</button>
     </div>
 </span>
-    <span>
+    <span th:unless="${fightService.activeFighter.isUser}">
     <p>
         <span>SomeName</span>
     </p>

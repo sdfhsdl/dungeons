@@ -2,28 +2,30 @@ package com.example.dungeons.services;
 
 import com.example.dungeons.models.fighter.Fighter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
-
 @Service
 @SessionScope
 public class FightService {
-    private final Fighter userFighter;
+    private Fighter userFighter;
     private Fighter activeFighter;
     private List<Fighter> fighters;
     private final DungeonService dungeonService;
     private Queue<Fighter> fighterQueue = new PriorityQueue();
     private AIBot aiBot;
-    private boolean userMove;
-    public FightService(Fighter userFighter, DungeonService dungeonService) {
-        this.userFighter = userFighter;
+    public FightService(DungeonService dungeonService) {
         this.dungeonService = dungeonService;
         fighters = dungeonService.getActiveLevel().getEnemies();
+    }
+    public void init(Fighter userFighter){
+        this.userFighter = userFighter;
         fighters.add(userFighter);
         aiBot = new AIBot(this, userFighter);
+        nextMove();
     }
     public void attack(Fighter fighter){
         fighter.setDamage(activeFighter.getAttack());
@@ -41,17 +43,23 @@ public class FightService {
         }
         nextMove();
     }
-    public void nextMove(){
+    public Fighter getActiveFighter(){
+        return activeFighter;
+    }
+    public Fighter getUserFighter(){
+        return userFighter;
+    }
+    private void nextMove(){
         activeFighter = fighterQueue.poll();
+        System.out.println(activeFighter);
         if(activeFighter == null){
             updateInitiative();
             fillingTheQueue();
             activeFighter = fighterQueue.poll();
         }
-        AIMove();
-    }
-    public boolean getUserMove(){
-        return userMove;
+        if(!activeFighter.getIsUser()) {
+            AIMove();
+        }
     }
     private void updateInitiative(){
         for(int i = 0; i < fighters.size(); i++){
@@ -62,10 +70,7 @@ public class FightService {
         fighterQueue.addAll(fighters);
     }
     private void AIMove(){
-        if (!activeFighter.getIsUser()){
             aiBot.setActiveFighter(activeFighter);
             aiBot.perform();
         }
-    }
-
 }

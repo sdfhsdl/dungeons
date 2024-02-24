@@ -20,7 +20,9 @@ public class LevelController {
     }
     @GetMapping("/level")
     public String getLevel(Model model){
-        model.addAttribute("activeFighter", fighterService.getActiveFighter());
+        fightService.init(fighterService.getActiveFighter());
+        model.addAttribute("userFighter", fighterService.getActiveFighter());
+        model.addAttribute("fightService", fightService);
         model.addAttribute("activeLevel", dungeonService.getActiveLevel());
         model.addAttribute("enemies", dungeonService.getActiveLevel().getEnemies());
         return "level.html";

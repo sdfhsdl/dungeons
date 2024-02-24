@@ -19,6 +19,10 @@ public class AIBot {
     }
     public void perform(){
         String value = getValueBasedOnProbability();
+        System.out.println(value);
+        System.out.println(SKIP_POINT + " - " + skipPoint);
+        System.out.println(ATTACK_POINT + " - " + attackPoint);
+        System.out.println(DEFEND_POINT + " - " + defendPoint);
         if(value.equals(ATTACK_POINT)){
             fightService.attack(userFighter);
         }
@@ -41,7 +45,7 @@ public class AIBot {
     private void setSkipPoint(){
         int point = 0;
         point -= getPointByHealthUser();
-        point += activeFighter.getInitiative()/activeFighter.getPriceAction();
+        point += (activeFighter.getInitiative()/activeFighter.getPriceAction())/10;
         skipPoint = point;
     }
     private void setDefendPoint(){
@@ -49,6 +53,7 @@ public class AIBot {
         point -= getPointByAttackBot();
         point -= getPointByHealthUser();
         point += getPointByArmorBot();
+        defendPoint = point;
     }
     private void setAttackPoint(){
         int point = 0;
@@ -63,6 +68,7 @@ public class AIBot {
             point -= 1;
             difference /= 1.5;
         }
+        System.out.println("Point by health user : " + point);
         return point;
     }
     private int getPointByAttackBot(){

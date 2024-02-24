@@ -3,7 +3,6 @@ package com.example.dungeons.models.fighter;
 import com.example.dungeons.models.fighter.characteristics.LevelModifiers;
 import com.example.dungeons.models.fighter.characteristics.Race;
 
-
 public class Fighter implements Comparable<Fighter>{
     public final String ARMOR = "ARMOR";
     public final String ATTACK = "ATTACK";
@@ -131,6 +130,7 @@ public class Fighter implements Comparable<Fighter>{
                 ", attack=" + attack +
                 ", speed=" + speed +
                 ", health=" + fullHealth +
+                ", initiative=" + initiative +
                 ", Race=" + race.getRaceName() +
                 ", Level=" + levelModifiers.getCurrentLevel() +
                 '}';
