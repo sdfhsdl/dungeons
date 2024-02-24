@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Выбери своего бойца</title>
+</head>
+<body>
+<h1>Создай персонажа : </h1>
+<form action="/" method="POST">
+    <tr th:each="p: ${RaceTypes}">
+        <h3><input type="radio"
+               name="raceType"
+                   th:value="${p}"
+               th:text="${p}">
+        </h3>
+    </tr>
+    <h2>
+        Введите имя персонажа
+    </h2>
+    <input type="text"
+           name="namePerson"/>
+    <button type="submit"> Создать </button>
+</form>
+</body>
+</html>

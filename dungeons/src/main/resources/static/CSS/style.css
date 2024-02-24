@@ -1,0 +1,32 @@
+.menu{
+position: sticky;
+background-color: #FFFACD;
+}
+.activeFighters{
+display: grid;
+grid-template-columns: 50% 50%;
+}
+.userBlock{
+display: inline-block;
+margin: 5px;
+padding: 6px;
+border: 3px solid #FF69B4;
+background-color: #FFF5EE;
+}
+.loggingFightBlock{
+text-align: center;
+margin: 10px;
+padding: 10 px;
+border: 5px solid #E9967A;
+background-color: #F0FFF0;
+}
+.enemyBlock{
+display: table;
+}
+.enemies{
+display: table-cell;
+margin: 5px;
+padding: 6px;
+background-color: #E6E6FA;
+border: 3px solid #FFD700;
+}

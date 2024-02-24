@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        Fighting
+    </title>
+    <link type="text/css" rel="stylesheet" href="CSS/style.css"/>
+</head>
+<body>
+<div class="menu">
+    Меню
+</div>
+<div class="activeFighters">
+<span>
+<p>
+    <span th:text="${activeFighter.name}"></span>
+</p>
+    <div class="userBlock">
+        <p>
+            <span>Здоровье: </span>
+        <span th:text="${activeFighter.health}"></span>
+            <span> / </span>
+            <span th:text="${activeFighter.fullHealth}"></span>
+        </p>
+    <p>
+        <span>Атака: </span>
+      <span th:text="${activeFighter.attack}"></span>
+    </p>
+    <p>
+        <span>Броня: </span>
+        <span th:text="${activeFighter.armor}"></span>
+    </p>
+    <p>
+        <span>Скорость: </span>
+        <span th:text="${activeFighter.speed}"></span>
+    </p>
+    </div>
+</span>
+    <span>
+    <p>
+        <span>SomeName</span>
+    </p>
+    <span class="userBlock"><p>
+        <span>Здоровье: </span>
+         </p>
+        <p>
+        <span>Атака: </span>
+        </p>
+        <p>
+        <span>Броня: </span>
+        </p>
+        <p>
+        <span>Скорость: </span>
+        </p>
+    </span>
+        </span>
+    <div>
+        <div class="loggingFightBlock">
+            Logging fight process..
+        </div>
+        <p>
+            ВРАГИ
+        </p>
+        <div class="enemyBlock">
+            <tr th:each="enemy : ${enemies}">
+                <div class="enemies">
+                    <p>
+                        <span>Здоровье: </span>
+                        <span th:text="${enemy.health}"></span>
+                        <span> / </span>
+                        <span th:text="${enemy.fullHealth}"></span>
+                    </p>
+                    <p>
+                        <span>Атака: </span>
+                        <span th:text="${enemy.attack}"></span>
+                    </p>
+                    <p>
+                        <span>Броня: </span>
+                        <span th:text="${enemy.armor}"></span>
+                    </p>
+                    <p>
+                        <span>Скорость: </span>
+                        <span th:text="${enemy.speed}"></span>
+                    </p>
+                </div>
+                </br>
+            </tr>
+        </div>
+    </div>
+</div>
+</body>
+</html>

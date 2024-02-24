@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Меню бойца</title>
+</head>
+<body>
+<h1>
+    Имя бойца:
+    <p th:text="${activeFighter.name}"></p><br>
+    Расса:
+    <p th:text="${activeFighter.race.RaceName}"></p><br>
+</h1>
+<table>
+<h2>
+    Характеристики вашего бойца
+</h2>
+<h3>
+    Здоровье:
+    <p th:text="${activeFighter.health}"></p>
+    Атака:
+    <p th:text="${activeFighter.attack}"></p>
+    Броня:
+    <p th:text="${activeFighter.armor}"></p>
+    Скорость:
+    <p th:text="${activeFighter.speed}"></p>
+</h3>
+<h2>
+    Очки опыта:
+    <tr th:text="${activeFighter.exp}"></tr><br>
+</h2>
+</table>
+<form action="/fighterPage" method="POST">
+    <button type="submit"> В подземелье! </button>
+</form>
+</body>
+</html>

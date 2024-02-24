@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Dungeon</title>
+</head>
+<body>
+<h1>
+  <span th:text="${activeFighter.name}"></span>
+  предстоит выбор:
+</h1>
+<tr th:each="level : ${levels}">
+    <div>
+  Сложность уровня:
+  <h3 th:text="${level.difficultLevel}"></h3>
+        <form action="/dungeon" method="POST">
+            <p for="id">
+            <button
+                   id = "id"
+                   name="id"
+            th:value="${level.id}"
+                >
+               Исследовать
+            </button>
+            </p>
+        </form>
+    </div>
+</tr>
+</body>
+</html>
