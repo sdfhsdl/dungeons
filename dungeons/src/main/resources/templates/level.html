@@ -7,17 +7,22 @@
     </title>
     <link type="text/css" rel="stylesheet" href="CSS/style.css"/>
     <link type="text/css" rel="stylesheet" href="CSS/action/activeElement.css"/>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
 <body>
 <div class="menu">
     Меню
 </div>
 <div class="activeFighters">
-<span>
+<span id="userFighter">
 <p>
     <span th:text="${userFighter.name}"></span>
 </p>
     <div class="userBlock">
+        <p id="name">
+            <span th:text="${userFighter.name}">
+            </span>
+        </p>
         <p>
             <span>Здоровье: </span>
         <span th:text="${userFighter.health}"></span>
@@ -36,12 +41,12 @@
         <span>Скорость: </span>
         <span th:text="${userFighter.speed}"></span>
     </p>
-        <button class="button">Атака</button>
+        <button id="attack_button" class="button">Атака</button>
         <button class="button">Оборона</button>
         <button class="button">Пропустить</button>
     </div>
 </span>
-    <span th:unless="${fightService.activeFighter.isUser}">
+    <span id="activeFighter" th:unless="${fightService.activeFighter.isUser}">
     <p>
         <span>SomeName</span>
     </p>
@@ -66,9 +71,13 @@
         <p>
             ВРАГИ
         </p>
-        <div class="enemyBlock">
+        <div id="enemyBlocks" class="enemyBlock">
             <tr th:each="enemy : ${enemies}">
                 <div class="enemies">
+                    <p>
+                        <span class="nameFighter" th:text="${enemy.name}">
+                        </span>
+                    </p>
                     <p>
                         <span>Здоровье: </span>
                         <span th:text="${enemy.health}"></span>
@@ -93,5 +102,7 @@
         </div>
     </div>
 </div>
+<script src="scripts/connector.js">
+</script>
 </body>
 </html>

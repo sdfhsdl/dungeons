@@ -3,9 +3,6 @@ package com.example.dungeons.services;
 import com.example.dungeons.models.fighter.Fighter;
 
 public class AIBot {
-    private final String DEFEND_POINT = "defend";
-    private final String ATTACK_POINT = "attack";
-    private final String SKIP_POINT = "skip";
     private int defendPoint = 0;
     private int attackPoint = 0;
     private int skipPoint = 0;
@@ -20,16 +17,16 @@ public class AIBot {
     public void perform(){
         String value = getValueBasedOnProbability();
         System.out.println(value);
-        System.out.println(SKIP_POINT + " - " + skipPoint);
-        System.out.println(ATTACK_POINT + " - " + attackPoint);
-        System.out.println(DEFEND_POINT + " - " + defendPoint);
-        if(value.equals(ATTACK_POINT)){
+        System.out.println(fightService.SKIP_POINT + " - " + skipPoint);
+        System.out.println(fightService.ATTACK_POINT + " - " + attackPoint);
+        System.out.println(fightService.DEFEND_POINT + " - " + defendPoint);
+        if(value.equals(fightService.ATTACK_POINT)){
             fightService.attack(userFighter);
         }
-        if(value.equals(DEFEND_POINT)){
+        if(value.equals(fightService.DEFEND_POINT)){
             fightService.defendYourself();
         }
-        if(value.equals(SKIP_POINT)){
+        if(value.equals(fightService.SKIP_POINT)){
             fightService.skip();
         }
     }
@@ -86,12 +83,12 @@ public class AIBot {
         int rand = (int)(Math.random() * sumPoints);
         rand -= defendPoint;
         if(rand < 0){
-            return DEFEND_POINT;
+            return fightService.DEFEND_POINT;
         }
         rand -= attackPoint;
         if(rand < 0){
-            return ATTACK_POINT;
+            return fightService.ATTACK_POINT;
         }
-            return SKIP_POINT;
+            return fightService.SKIP_POINT;
     }
 }
