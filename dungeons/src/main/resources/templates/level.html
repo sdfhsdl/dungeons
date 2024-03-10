@@ -1,108 +1,130 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
 <head>
     <meta charset="UTF-8">
     <title>
         Fighting
     </title>
-    <link type="text/css" rel="stylesheet" href="CSS/style.css"/>
-    <link type="text/css" rel="stylesheet" href="CSS/action/activeElement.css"/>
+    <link type="text/css" rel="stylesheet" href="CSS/style.css" />
+    <link type="text/css" rel="stylesheet" href="CSS/action/activeElement.css" />
     <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 </head>
+
 <body>
-<div class="menu">
-    Меню
-</div>
-<div class="activeFighters">
-<span id="userFighter">
-<p>
-    <span th:text="${userFighter.name}"></span>
-</p>
-    <div class="userBlock">
-        <p id="name">
-            <span th:text="${userFighter.name}">
-            </span>
-        </p>
-        <p>
-            <span>Здоровье: </span>
-        <span th:text="${userFighter.health}"></span>
-            <span> / </span>
-            <span th:text="${userFighter.fullHealth}"></span>
-        </p>
-    <p>
-        <span>Атака: </span>
-      <span th:text="${userFighter.attack}"></span>
-    </p>
-    <p>
-        <span>Броня: </span>
-        <span th:text="${userFighter.armor}"></span>
-    </p>
-    <p>
-        <span>Скорость: </span>
-        <span th:text="${userFighter.speed}"></span>
-    </p>
-        <button id="attack_button" class="button">Атака</button>
-        <button class="button">Оборона</button>
-        <button class="button">Пропустить</button>
+    <div class="menu">
+        Меню
     </div>
-</span>
-    <span id="activeFighter" th:unless="${fightService.activeFighter.isUser}">
-    <p>
-        <span>SomeName</span>
-    </p>
-    <span class="userBlock"><p>
-        <span>Здоровье: </span>
-         </p>
-        <p>
-        <span>Атака: </span>
-        </p>
-        <p>
-        <span>Броня: </span>
-        </p>
-        <p>
-        <span>Скорость: </span>
-        </p>
-    </span>
-        </span>
-    <div>
+    <div class="activeFighters">
+        <div id="userFighter" class="userBlock">
+                <p id="name">
+                    <span th:text="${userFighter.name}">
+                    </span>
+                </p>
+                <p>
+                    <span>Здоровье: </span>
+                    <span th:text="${userFighter.health}"></span>
+                    <span> / </span>
+                    <span th:text="${userFighter.fullHealth}"></span>
+                </p>
+                <p>
+                    <span>Атака: </span>
+                    <span th:text="${userFighter.attack}"></span>
+                </p>
+                <p>
+                    <span>Броня: </span>
+                    <span th:text="${userFighter.armor}"></span>
+                </p>
+                <p>
+                    <span>Скорость: </span>
+                    <span th:text="${userFighter.speed}"></span>
+                </p>
+                <button id="attack_button" class="button">Атака</button>
+                <button id="defend_button" class="button">Оборона</button>
+                <button id="skip_button" class="button">Пропустить</button>
+        </div>
         <div class="loggingFightBlock">
             Logging fight process..
         </div>
-        <p>
-            ВРАГИ
-        </p>
-        <div id="enemyBlocks" class="enemyBlock">
-            <tr th:each="enemy : ${enemies}">
-                <div class="enemies">
+        <div id="activeFighter">
+        <td>
+            <th:block th:if="${activeFighter?.isUser}">
+                <span>
+                </span>
+            </th:block>
+            <th:block th:unless="${activeFighter?.isUser}">
+                <div class="userBlock">
                     <p>
-                        <span class="nameFighter" th:text="${enemy.name}">
+                        <span class="nameFighter" th:text="${activeFighter.name}">
                         </span>
                     </p>
                     <p>
                         <span>Здоровье: </span>
-                        <span th:text="${enemy.health}"></span>
+                        <span th:text="${activeFighter.health}"></span>
                         <span> / </span>
-                        <span th:text="${enemy.fullHealth}"></span>
+                        <span th:text="${activeFighter.fullHealth}"></span>
                     </p>
                     <p>
                         <span>Атака: </span>
-                        <span th:text="${enemy.attack}"></span>
+                        <span th:text="${activeFighter.attack}"></span>
                     </p>
                     <p>
                         <span>Броня: </span>
-                        <span th:text="${enemy.armor}"></span>
+                        <span th:text="${activeFighter.armor}"></span>
                     </p>
                     <p>
                         <span>Скорость: </span>
-                        <span th:text="${enemy.speed}"></span>
+                        <span th:text="${activeFighter.speed}"></span>
+                    </p>
+                    <p>
+                        <span>Инициатива: </span>
+                        <span th:text="${activeFighter.initiative}"></span>
                     </p>
                 </div>
-                </br>
-            </tr>
-        </div>
+            </th:block>
+        </td>
     </div>
 </div>
-<script src="scripts/connector.js">
-</script>
+        <div>
+            <p>
+                ВРАГИ
+            </p>
+            <div id="enemyBlocks" class="enemyBlock">
+                <tr th:each="enemy : ${enemies}">
+                    <div class="enemies">
+                        <p>
+                            <span class="nameFighter" th:text="${enemy.name}">
+                            </span>
+                        </p>
+                        <p>
+                            <span>Здоровье: </span>
+                            <span th:text="${enemy.health}"></span>
+                            <span> / </span>
+                            <span th:text="${enemy.fullHealth}"></span>
+                        </p>
+                        <p>
+                            <span>Атака: </span>
+                            <span th:text="${enemy.attack}"></span>
+                        </p>
+                        <p>
+                            <span>Броня: </span>
+                            <span th:text="${enemy.armor}"></span>
+                        </p>
+                        <p>
+                            <span>Скорость: </span>
+                            <span th:text="${enemy.speed}"></span>
+                        </p>
+                        <p>
+                            <span>Инициатива: </span>
+                            <span th:text="${enemy.initiative}"></span>
+                        </p>
+                    </div>
+                    </br>
+                </tr>
+            </div>
+        </div>
+    <script src="scripts/connector.js">
+    </script>
 </body>
+
 </html>

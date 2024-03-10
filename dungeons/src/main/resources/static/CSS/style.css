@@ -4,7 +4,7 @@ background-color: #FFFACD;
 }
 .activeFighters{
 display: grid;
-grid-template-columns: 50% 50%;
+grid-template-columns: 1fr 1fr 1fr;
 }
 .userBlock{
 display: inline-block;

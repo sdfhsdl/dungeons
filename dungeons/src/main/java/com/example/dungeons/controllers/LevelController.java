@@ -31,19 +31,28 @@ public class LevelController {
     public String getLevel(Model model){
         fightService.init(fighterService.getActiveFighter());
         model.addAttribute("userFighter", fighterService.getActiveFighter());
-        model.addAttribute("fightService", fightService);
+        model.addAttribute("activeFighter", fightService.getActiveFighter());
         model.addAttribute("enemies", dungeonService.getActiveLevel().getEnemies());
         return "level.html";
     }
-    @PostMapping("/reload-data-url")
+    @PostMapping("/update_fightersQueue-url")
     @ResponseBody
-    public String processReloadData(@RequestBody String body) {
-        System.out.println("Перезапуск");
-        System.out.println(body);
+    public String updateFightersQueue(@RequestBody String body) {
+        System.out.println("Update queue");
+        fightService.getAction(body);
         fightService.nextMove();
-        dungeonService.getActiveLevel().getEnemies().remove(0);
         return generatorHTML.getHTMLAllFightersBlock(dungeonService.getActiveLevel().getEnemies()) +
                 "<div> Test success<div>";
     }
-
+    @PostMapping("/update_activeFighter-url")
+    @ResponseBody
+    public String updateFight(){
+        System.out.println("Update fight");
+        return generatorHTML.getHTMLActiveFighterBlock(fightService.getActiveFighter());
+    }
+    @PostMapping("/update_user_url")
+    @ResponseBody
+    public String updateUser(){
+        return generatorHTML.getHTMLUserBlock(fightService.getUserFighter());
+    }
 }

@@ -1,23 +1,34 @@
 var chooseEnemy;
 var isAttackClick = false;
 
-const elementAttack = document.getElementById("attack_button").addEventListener('click', function(){
+let elementAttack;
+let elementDefend;
+
+let elementSkip;
+
+let enemiesElements;
+load();
+function load(){
+    elementAttack = document.getElementById("attack_button").addEventListener('click', function(){
         console.log('Успех');
         isAttackClick = true;
-        setListener();
-})
-//window.onclick = e => {
-  //  console.log(e.target.innerText);
-//} 
-//window.addEventListener('click', function(e){   
-  //  if (document.getElementById('').contains(e.target)){
-   //   e.target.getElementsByClassName('name')
-   // } else{
-      // Clicked outside the box
-   // }
- // });
-const enemiesElements = document.getElementsByClassName("enemies");
-function setListener(){
+        setListenerByAttackButton();
+});
+elementDefend = document.getElementById("defend_button").addEventListener('click', setListenerByDefendButton);
+
+elementSkip = document.getElementById("skip_button").addEventListener('click', setListenerBySkipButton);
+
+enemiesElements = document.getElementsByClassName("enemies");
+}
+
+function setListenerBySkipButton(){
+    console.log('Успех skip');
+    update_fightersQueue('skip', 'yourself');
+    update_activeFighter();
+    update_userFighter();
+}
+
+function setListenerByAttackButton(){
     console.log(enemiesElements);
 for(var i = 0; i < enemiesElements.length; i++){
     let d = enemiesElements[i];
@@ -25,29 +36,58 @@ for(var i = 0; i < enemiesElements.length; i++){
         if(isAttackClick){
             console.log("work")
             let nameFighter = getName(d);
-            update_All('attack', nameFighter);
+            update_fightersQueue('attack', nameFighter);
+            update_activeFighter();
+            update_userFighter();
         }
     });
 }
+}
+function setListenerByDefendButton(){
+    console.log('Успех defend');
+    update_fightersQueue('defend', 'yourself');
+    update_activeFighter();
+    update_userFighter();
 }
 function getName(enemy){
     nameFighter = enemy.getElementsByClassName("nameFighter")[0].innerHTML;
     return nameFighter;
 }
-function update_All(arg_action, id_enemy){
+function update_fightersQueue(arg_action, id_enemy){
     console.log("функция attack_click" + arg_action + id_enemy);
     var dataResponse = {arg : arg_action, id : id_enemy};
     console.log(dataResponse);
     $(document).ready(function(){
             $.ajax({
                 type: 'post',
-                url : "/reload-data-url",
+                url : "/update_fightersQueue-url",
                 data : JSON.stringify(dataResponse),
                 dateType: 'json',
                 contentType: "application/json"
-            }).done(function(header) { // get from controller
-        $("#enemyBlocks").replaceWith(header); // update snippet of page
+            }).done(function(header) { 
+        $("#enemyBlocks").replaceWith(header); 
     });
     })
     isAttackClick = false;
+}
+function update_activeFighter(){
+    $(document).ready(function(){
+        $.ajax({
+            type: 'post',
+            url: '/update_activeFighter-url'
+        }).done(function(header){
+            $("#activeFighter").replaceWith(header);
+        });
+    })
+}
+function update_userFighter(){
+    $(document).ready(function(){
+        $.ajax({
+            type: 'post',
+            url: '/update_user_url'
+        }).done(function(header){
+            $("#userFighter").replaceWith(header);
+            load();
+        });
+    })
 }

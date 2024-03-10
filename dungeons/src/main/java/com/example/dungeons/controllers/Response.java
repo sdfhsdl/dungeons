@@ -19,4 +19,12 @@ public class Response {
     public void setId(String id) {
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "arg='" + arg + '\'' +
+                ", id='" + id + '\'' +
+                '}';
+    }
 }
