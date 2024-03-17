@@ -3,6 +3,9 @@ package com.example.dungeons.services;
 import com.example.dungeons.models.fighter.Fighter;
 import com.example.dungeons.models.fighter.RaceType;
 import com.example.dungeons.models.fighter.characteristics.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.SessionScope;
 
@@ -14,6 +17,7 @@ import java.util.Map;
 import static com.example.dungeons.models.fighter.RaceType.*;
 
 @Service
+@Configuration
 @SessionScope
 public class FighterService {
     private Fighter activeFighter;
@@ -25,6 +29,8 @@ public class FighterService {
         }
         return listFighter;
     }
+    @Bean
+    @Lazy
     public Fighter createFighter(String name, Race raceType){
         Fighter fighter = new Fighter(raceType, true);
         fighter.setName(name);

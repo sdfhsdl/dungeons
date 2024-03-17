@@ -3,82 +3,72 @@ package com.example.dungeons.services;
 import com.example.dungeons.controllers.Response;
 import com.example.dungeons.models.fighter.Fighter;
 import com.google.gson.Gson;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.*;
-
 @Service
 @SessionScope
 public class FightService {
     public final static String DEFEND_POINT = "defend";
     public final static String ATTACK_POINT = "attack";
     public final static String SKIP_POINT = "skip";
+    public final static String TARGET_YOURSELF = "yourself";
     private Fighter userFighter;
     private Fighter activeFighter;
+    private List<Fighter> isDeath = new ArrayList<>();
     private List<Fighter> fighters;
     private final DungeonService dungeonService;
-    private Queue<Fighter> fighterQueue = new PriorityQueue();
+    private final FightActions fightActions;
+    private int countFighters;
     private AIBot aiBot;
-    public FightService(DungeonService dungeonService) {
+    private boolean gameOver = false;
+    public FightService(DungeonService dungeonService, Fighter userFighter, FightActions fightActions) {
         this.dungeonService = dungeonService;
-        fighters = dungeonService.getActiveLevel().getEnemies();
-    }
-    public void init(Fighter userFighter){
         this.userFighter = userFighter;
+        this.fightActions = fightActions;
+        init();
+    }
+    private void init(){
+        countFighters = 0;
+        fighters = dungeonService.getActiveLevel().getEnemies();
         fighters.add(userFighter);
         fighters.sort(null);
-        aiBot = new AIBot(this, userFighter);
-        nextMove();
+        activeFighter = fighters.get(0);
+        fightActions.setFighters(fighters);
     }
-    public void getAction(String action){
+    @Autowired
+    public void setAiBot(AIBot aiBot){
+        this.aiBot = aiBot;
+    }
+    public void action(String body){
+        System.out.println("UserFighter -   " + userFighter.getName());
         Gson gson = new Gson();
-        Response response = gson.fromJson(action, Response.class);
-        System.out.println(response);
-        if(response.getArg().equals(ATTACK_POINT)){
-            attack(getFighterByName(response.getId()));
-        }if(response.getArg().equals(DEFEND_POINT)){
-            defendYourself();
-        }if(response.getArg().equals(SKIP_POINT)){
-            skip();
-        }
+        Response response = gson.fromJson(body, Response.class);
+        System.out.println(response.getArg() + " " + response.getId()+ " " + userFighter.getName());
+        fightActions.getAction(response, activeFighter);
     }
-    public void attack(Fighter fighter){
-        fighter.setDamage(activeFighter.getAttack());
-        activeFighter.performAction();
-        if(!fighter.getIsAlive()){
-            fighters.remove(fighter);
-            fighterQueue.remove(fighter);
-        }
-    }
-    public void defendYourself(){
-        activeFighter.defend();
-        activeFighter.performAction();
-    }
-    public void skip(){
-        for(int i = 0; i < 2; i++) {
-            activeFighter.updateInitiative();
-        }
-    }
-    public Fighter getActiveFighter(){
-        return activeFighter;
-    }
-    public Fighter getUserFighter(){
-        return userFighter;
-    }
-    public Queue<Fighter> getFighterQueue(){return fighterQueue;}
     public void nextMove(){
-        fighters.sort(null);
-        activeFighter = fighterQueue.poll();
-        System.out.println(activeFighter);
-        if(activeFighter == null){
-            updateInitiative();
-            fillingTheQueue();
-            activeFighter = fighterQueue.poll();
-        }
+        updateAll();
+        System.out.println("ACTIVE FIGHTER :  " + activeFighter.getName());
         if(!activeFighter.getIsUser()) {
             AIMove();
+        }
+    }
+    public List<Fighter> getFighters(){
+        return fighters;
+    }
+    private void updateAll(){
+        activeFighter = fighters.get(countFighters);
+        checkUserFighter();
+        checkFightersIsAlive();
+        if(countFighters < fighters.size() - 1){
+            countFighters++;
+        }else{
+            countFighters = 0;
+            fighters.sort(null);
+            updateInitiative();
         }
     }
     private void updateInitiative(){
@@ -86,19 +76,24 @@ public class FightService {
             fighters.get(i).updateInitiative();
         }
     }
-    private void fillingTheQueue(){
-        fighterQueue.addAll(fighters);
+    private void checkFightersIsAlive(){
+        for(Fighter fighter : fighters){
+            if(!fighter.getIsAlive()){
+                isDeath.add(fighter);
+            }
+        }
+    }
+    private void checkUserFighter(){
+        gameOver = !userFighter.getIsAlive();
     }
     private void AIMove(){
             aiBot.setActiveFighter(activeFighter);
             aiBot.perform();
         }
-        private Fighter getFighterByName(String name){
-        for(int i = 0; i < fighters.size(); i++){
-            if(fighters.get(i).getName().equals(name)){
-                return fighters.get(i);
-            }
-        }
-        return null;
-        }
+    public Fighter getActiveFighter(){
+        return activeFighter;
+    }
+    public Fighter getUserFighter(){
+        return userFighter;
+    }
 }

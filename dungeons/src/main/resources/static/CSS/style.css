@@ -5,8 +5,12 @@ background-color: #FFFACD;
 .activeFighters{
 display: grid;
 grid-template-columns: 1fr 1fr 1fr;
+height: 64vh;
+max-height: 64vh;
 }
 .userBlock{
+border-bottom-right-radius: 7px;
+border-bottom-left-radius: 7px;
 display: inline-block;
 margin: 5px;
 padding: 6px;
@@ -14,13 +18,20 @@ border: 3px solid #FF69B4;
 background-color: #FFF5EE;
 }
 .loggingFightBlock{
+border-bottom-right-radius: 7px;
+border-bottom-left-radius: 7px;
 text-align: center;
+height: 44vh;
+max-height: 44vh;
 margin: 10px;
 padding: 10 px;
 border: 5px solid #E9967A;
 background-color: #F0FFF0;
+overflow-y: scroll;
 }
 .enemyBlock{
+border-bottom-right-radius: 7px;
+border-bottom-left-radius: 7px;
 display: table;
 }
 .enemies{

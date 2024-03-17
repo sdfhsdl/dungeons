@@ -1,35 +1,36 @@
 package com.example.dungeons.services;
 
+import com.example.dungeons.controllers.Response;
 import com.example.dungeons.models.fighter.Fighter;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+@Component
+@Lazy
 public class AIBot {
     private int defendPoint = 0;
     private int attackPoint = 0;
     private int skipPoint = 0;
     private Fighter activeFighter;
     private Fighter userFighter;
-    private final FightService fightService;
-
-    public AIBot(FightService fightService, Fighter userFighter) {
-        this.fightService = fightService;
-        this.userFighter = userFighter;
-    }
+    private FightActions fightActions;
     public void perform(){
         String value = getValueBasedOnProbability();
-        System.out.println(value);
-        System.out.println(fightService.SKIP_POINT + " - " + skipPoint);
-        System.out.println(fightService.ATTACK_POINT + " - " + attackPoint);
-        System.out.println(fightService.DEFEND_POINT + " - " + defendPoint);
-        if(value.equals(fightService.ATTACK_POINT)){
-            fightService.attack(userFighter);
+        Response response = new Response();
+        response.setArg(value);
+        if(value.equals(FightService.ATTACK_POINT)){
+            response.setId(userFighter.getName());
+        }else{
+            response.setId(FightService.TARGET_YOURSELF);
         }
-        if(value.equals(fightService.DEFEND_POINT)){
-            fightService.defendYourself();
-        }
-        if(value.equals(fightService.SKIP_POINT)){
-            fightService.skip();
-        }
+        fightActions.getAction(response, activeFighter);
     }
+    @Autowired
+    public void setUserFighter(Fighter userFighter){
+        this.userFighter = userFighter;
+    }
+    @Autowired
+    public void setFightActions(FightActions fightActions){this.fightActions = fightActions;}
     public void setActiveFighter(Fighter activeFighter){
         this.activeFighter = activeFighter;
         setPoints();
@@ -65,11 +66,10 @@ public class AIBot {
             point -= 1;
             difference /= 1.5;
         }
-        System.out.println("Point by health user : " + point);
         return point;
     }
     private int getPointByAttackBot(){
-        int point = 0;
+        int point = 6;
         point += activeFighter.getAttack() / 5;
         return point;
     }
@@ -83,12 +83,12 @@ public class AIBot {
         int rand = (int)(Math.random() * sumPoints);
         rand -= defendPoint;
         if(rand < 0){
-            return fightService.DEFEND_POINT;
+            return FightService.DEFEND_POINT;
         }
         rand -= attackPoint;
         if(rand < 0){
-            return fightService.ATTACK_POINT;
+            return FightService.ATTACK_POINT;
         }
-            return fightService.SKIP_POINT;
+            return FightService.SKIP_POINT;
     }
 }

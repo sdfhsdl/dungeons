@@ -38,6 +38,12 @@ public class GeneratorHTML {
                 "</div>"
                 ;
     }
+    public String getHTMLLogBlock(String log){
+        System.out.println(log);
+        return "<div id=\"logBlock\" class=\"loggingFightBlock\">" +
+                log +
+                "</div>";
+    }
     private String getHTMLFighterBlock(Fighter fighter, String nameBlock){
         String html =
                 "<div " + nameBlock + ">" +

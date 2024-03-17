@@ -3,17 +3,14 @@ package com.example.dungeons.controllers;
 import com.example.dungeons.services.DungeonService;
 import com.example.dungeons.services.FightService;
 import com.example.dungeons.services.FighterService;
-import com.google.gson.Gson;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import com.example.dungeons.services.LogFightService;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class LevelController {
@@ -21,28 +18,31 @@ public class LevelController {
     private final FighterService fighterService;
     private final FightService fightService;
     private final GeneratorHTML generatorHTML;
-    public LevelController(DungeonService dungeonService, FighterService fighterService, FightService fightService, GeneratorHTML generatorHTML) {
+    private final LogFightService logFightService;
+    public LevelController(DungeonService dungeonService, FighterService fighterService, FightService fightService, GeneratorHTML generatorHTML, LogFightService logFightService) {
         this.dungeonService = dungeonService;
         this.fighterService = fighterService;
         this.fightService = fightService;
         this.generatorHTML = generatorHTML;
+        this.logFightService = logFightService;
     }
     @GetMapping("/level")
     public String getLevel(Model model){
-        fightService.init(fighterService.getActiveFighter());
         model.addAttribute("userFighter", fighterService.getActiveFighter());
         model.addAttribute("activeFighter", fightService.getActiveFighter());
         model.addAttribute("enemies", dungeonService.getActiveLevel().getEnemies());
         return "level.html";
     }
+    @PostMapping("/set_action")
+    @ResponseBody
+    public void setAction(@RequestBody String body){
+        fightService.action(body);
+    }
     @PostMapping("/update_fightersQueue-url")
     @ResponseBody
-    public String updateFightersQueue(@RequestBody String body) {
+    public String updateFightersQueue() {
         System.out.println("Update queue");
-        fightService.getAction(body);
-        fightService.nextMove();
-        return generatorHTML.getHTMLAllFightersBlock(dungeonService.getActiveLevel().getEnemies()) +
-                "<div> Test success<div>";
+        return generatorHTML.getHTMLAllFightersBlock(fightService.getFighters());
     }
     @PostMapping("/update_activeFighter-url")
     @ResponseBody
@@ -54,5 +54,21 @@ public class LevelController {
     @ResponseBody
     public String updateUser(){
         return generatorHTML.getHTMLUserBlock(fightService.getUserFighter());
+    }
+    @PostMapping("/update_logFight")
+    @ResponseBody
+    public String updateLogFight(){
+        return generatorHTML.getHTMLLogBlock(logFightService.getAllLog());
+    }
+    @PostMapping("/checkUserMove")
+    @ResponseBody
+    public String checkUserMove(){
+        return fightService.getActiveFighter().getIsUser() ? "true" : "false";
+    }
+    @PostMapping("/next_move")
+    @ResponseBody
+    public String nextMove(){
+        fightService.nextMove();
+        return "next";
     }
 }
