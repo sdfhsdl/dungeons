@@ -68,7 +68,16 @@ public class LevelController {
     @PostMapping("/next_move")
     @ResponseBody
     public String nextMove(){
-        fightService.nextMove();
-        return "next";
+        if(!fightService.isGameOver()) {
+            fightService.nextMove();
+            return "next";
+        }else{
+            return "game over";
+        }
+    }
+    @PostMapping("/game_Over")
+    @ResponseBody
+    public String gameOver(){
+        return generatorHTML.gameOver();
     }
 }

@@ -52,15 +52,17 @@ public class FightService {
     public void nextMove(){
         updateAll();
         System.out.println("ACTIVE FIGHTER :  " + activeFighter.getName());
-        if(!activeFighter.getIsUser()) {
+        if(!activeFighter.getIsUser() & userFighter.getIsAlive()) {
             AIMove();
         }
     }
     public List<Fighter> getFighters(){
         return fighters;
     }
+    public boolean isGameOver(){
+        return gameOver;
+    }
     private void updateAll(){
-        activeFighter = fighters.get(countFighters);
         checkUserFighter();
         checkFightersIsAlive();
         if(countFighters < fighters.size() - 1){
@@ -70,6 +72,7 @@ public class FightService {
             fighters.sort(null);
             updateInitiative();
         }
+        activeFighter = fighters.get(countFighters);
     }
     private void updateInitiative(){
         for(int i = 0; i < fighters.size(); i++){
@@ -79,7 +82,9 @@ public class FightService {
     private void checkFightersIsAlive(){
         for(Fighter fighter : fighters){
             if(!fighter.getIsAlive()){
+                System.out.println("FIGHTER DEATH -" + fighter.getName());
                 isDeath.add(fighter);
+                fighters.remove(fighter);
             }
         }
     }

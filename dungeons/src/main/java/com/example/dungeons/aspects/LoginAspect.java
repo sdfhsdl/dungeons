@@ -23,7 +23,6 @@ public class LoginAspect {
     @Before("@annotation(LogFight)")
     public void getLogAttack(JoinPoint joinPoint){
         Object[] args = joinPoint.getArgs();
-        System.out.println(args);
         Response response = (Response) args[0];
         Object[] argsForLog = new Object[]{response.getArg(), response.getId(), args[1]};
         logFightService.setLog(argsForLog);

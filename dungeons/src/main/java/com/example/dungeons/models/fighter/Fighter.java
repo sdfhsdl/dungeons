@@ -64,6 +64,7 @@ public class Fighter implements Comparable<Fighter>{
         health -= Math.round((double)attack - ((double)attack/100 * armor));
         isDefend = false;
         if(health <= 0){
+            health = 0;
             isAlive = false;
             initiative = 0;
         }

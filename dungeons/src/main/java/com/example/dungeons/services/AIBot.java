@@ -69,7 +69,7 @@ public class AIBot {
         return point;
     }
     private int getPointByAttackBot(){
-        int point = 6;
+        int point = 10;
         point += activeFighter.getAttack() / 5;
         return point;
     }

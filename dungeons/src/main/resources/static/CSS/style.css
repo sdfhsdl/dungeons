@@ -42,3 +42,8 @@ cursor: pointer;
 background-color: #E6E6FA;
 border: 3px solid #FFD700;
 }
+.dieBlock{
+background-color: #3333338e;
+text-align: center;
+font-size: 200px;
+}

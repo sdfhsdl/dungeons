@@ -39,7 +39,6 @@ public class GeneratorHTML {
                 ;
     }
     public String getHTMLLogBlock(String log){
-        System.out.println(log);
         return "<div id=\"logBlock\" class=\"loggingFightBlock\">" +
                 log +
                 "</div>";
@@ -79,5 +78,8 @@ public class GeneratorHTML {
                 "<span>Инициатива: </span>" +
                 "<span>" + fighter.getInitiative() +  "</span>" +
                 "</p>";
+    }
+    public String gameOver(){
+        return "<div class=\"dieBlock\"> You died </div>";
     }
 }

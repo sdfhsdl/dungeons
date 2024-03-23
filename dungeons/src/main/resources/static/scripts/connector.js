@@ -1,5 +1,6 @@
 var chooseEnemy;
 var isAttackClick = false;
+var gameFinish = false;
 
 let elementAttack;
 let elementDefend;
@@ -11,9 +12,7 @@ checkUserMove();
 function load(botOrUserMove){
     if(botOrUserMove){
         setActiveButtons(false);
-        console.log("Ход User")
     elementAttack = document.getElementById("attack_button").addEventListener('click', function(){
-        console.log('Успех');
         isAttackClick = true;
         setListenerByAttackButton();
 });
@@ -25,14 +24,17 @@ enemiesElements = document.getElementsByClassName("enemies");
 }else{
     setActiveButtons(true);
     setTimeout(function(){
-    console.log("Ход противника");
     update_fightersQueue();
     update_log();
     update_userFighter();
     nextMove();
+    if(gameFinish){
+        gameOver();
+        return;
+    }
     update_activeFighter();
     checkUserMove();
-}, 1000)
+}, 1500)
 }
 }
 function setActiveButtons(active){
@@ -162,6 +164,21 @@ function nextMove(){
             url: '/next_move'
         }).done(function(header){
             console.log(header);
+            if(header == "game over"){
+                gameFinish = true;
+            }
+        })
+    })
+}
+function gameOver(){
+    $(document).ready(function(){
+        $.ajax({
+            async: false,
+            type: 'post',
+            url: '/game_Over'
+        }).done(function(header){
+            $("#enemieBlocks").replaceWith("");
+            $("#main").replaceWith(header);
         })
     })
 }

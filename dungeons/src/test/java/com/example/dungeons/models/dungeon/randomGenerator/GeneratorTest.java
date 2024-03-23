@@ -6,6 +6,7 @@ import com.example.dungeons.models.fighter.characteristics.Race;
 import com.example.dungeons.models.dungeon.Dungeon;
 import org.junit.jupiter.api.Test;
 
+import java.util.Comparator;
 import java.util.List;
 
 class GeneratorTest {
@@ -45,4 +46,13 @@ Generator generator = new Generator();
         System.out.println(c + " - Человеков создано");
         System.out.println(d + " - Орков создано");
     }
+    @Test
+    void testCounter(){
+      long a = 0;
+      int b = 135;
+      a += b;
+      String ds = "";
+
+    }
+
 }
